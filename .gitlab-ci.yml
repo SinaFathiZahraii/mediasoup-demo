@@ -1,32 +1,40 @@
 stages:
   - build
- # - test
+  - test
   - deploy
 
 variables:
-  IMAGE_NAME:
-    mediasoup-demo
+  IMAGE_TAG: $CI_COMMIT_SHA
+
+default:
+  tags:
+    - runner-tag  
 
 build:
   stage: build
-  image:
-    name: docker:27
-  services:
-    - docker:27-dind
   script:
-    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker build -t sinafathi/mediasoup:$IMAGE_TAG .
+
+test:
+  stage: test
+  image: node:22
+  script:
+    - cd server
+    - npm ci --omit=dev
+    - cd ../app
+    - npm ci --legacy-peer-deps
+    - npm run lint || true 
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 deploy:
   stage: deploy
-  image:
-    name: bitnami/kubectl:latest
+  image: bitnami/kubectl:latest
   script:
     - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" > ~/.kube/config
+    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+    - chmod 600 ~/.kube/config
+    - sed -i "s|sinafathi/mediasoup-demo:v1|$IMAGE_TAG|g" k8s/deployment.yaml
     - kubectl apply -f k8s/
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-
-
