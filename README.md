@@ -70,7 +70,7 @@ cd app && npm run dev
 ## setup via Docker
 
 ```
-# docker build -t IMAGE_NAME:INAGE_TAG .
-# docker run -d --name CANTAINER_NAME -p 4443:4443 IMAGE_NAME:INAGE_TAG
+docker build -t IMAGE_NAME:INAGE_TAG .
+docker run -d --name CANTAINER_NAME -p 4443:4443 IMAGE_NAME:INAGE_TAG
 ```
 
