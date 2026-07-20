@@ -40,5 +40,4 @@ ENV NODE_ENV=production
 EXPOSE 4443
 
 CMD ["./bin/mediasoup-demo-server"]
-#CMD ["npm","start"]
 
