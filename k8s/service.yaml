@@ -7,15 +7,5 @@ spec:
   selector:
     app: mediasoup-demo
   ports:
-  - name: http
-    port: 4443
-    targetPort: 4443
-    protocol: TCP
-  - name: webrtc-udp
-    port: 44444
-    targetPort: 44444
-    protocol: UDP
-  - name: webrtc-tcp
-    port: 44444
-    targetPort: 44444
-    protocol: TCP
+    - port: 4443
+      targetPort: 4443

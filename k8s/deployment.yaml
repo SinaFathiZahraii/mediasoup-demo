@@ -14,23 +14,10 @@ spec:
     spec:
       containers:
       - name: mediasoup-demo
-        image: your-dockerhub-username/mediasoup-demo:latest
+        image: sinafathi/mediasoup-demo:v1
         imagePullPolicy: IfNotPresent
         ports:
-        - name: http
-          containerPort: 4443
-          protocol: TCP
-        - name: webrtc-udp
-          containerPort: 44444
-          protocol: UDP
-        - name: webrtc-tcp
-          containerPort: 44444
-          protocol: TCP
-        env:
-        - name: HTTP_LISTEN_PORT
-          value: "4443"
-        - name: MEDIASOUP_LISTEN_IP
-          value: "0.0.0.0"
+        - containerPort: 4443
         resources:
           requests:
             cpu: "2"
