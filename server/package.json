@@ -1,0 +1,72 @@
+{
+	"name": "mediasoup-demo-server",
+	"version": "3.1.0",
+	"description": "mediasoup-demo server",
+	"author": "Iñaki Baz Castillo <ibc@aliax.net>",
+	"license": "ISC",
+	"homepage": "https://mediasoup.org",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/versatica/mediasoup-demo.git"
+	},
+	"funding": {
+		"type": "opencollective",
+		"url": "https://opencollective.com/mediasoup"
+	},
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"bin": {
+		"mediasoup-demo-server": "bin/mediasoup-demo-server",
+		"mediasoup-demo-server-connect-terminal": "bin/mediasoup-demo-server-connect-terminal"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"keywords": [
+		"mediasoup",
+		"webrtc",
+		"sfu",
+		"nodejs"
+	],
+	"scripts": {
+		"prepare": "node npm-scripts.mjs prepare",
+		"typescript:build": "node npm-scripts.mjs typescript:build",
+		"typescript:watch": "node npm-scripts.mjs typescript:watch",
+		"lint": "node npm-scripts.mjs lint",
+		"format": "node npm-scripts.mjs format",
+		"release:check": "node npm-scripts.mjs release:check",
+		"release": "node npm-scripts.mjs release",
+		"start": "npx mediasoup-demo-server",
+		"watch": "node npm-scripts.mjs watch",
+		"connect-terminal": "npx mediasoup-demo-server-connect-terminal"
+	},
+	"dependencies": {
+		"@sitespeed.io/throttle": "^6.0.0",
+		"awaitqueue": "^3.3.1",
+		"body-parser": "^2.3.0",
+		"debug": "^4.4.3",
+		"express": "^5.2.1",
+		"mediasoup": "^3.21.2",
+		"picocolors": "^1.1.1",
+		"pidusage": "^4.0.1",
+		"protoo-server": "^4.0.8",
+		"supports-color": "^10.2.2"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@types/debug": "^4.1.13",
+		"@types/express": "^5.0.6",
+		"@types/node": "^26.0.0",
+		"@types/pidusage": "^2.0.5",
+		"@types/protoo-server": "^4.0.6",
+		"eslint": "^10.5.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-prettier": "^5.5.6",
+		"globals": "^17.6.0",
+		"nodemon": "^3.1.14",
+		"prettier": "^3.8.4",
+		"tsx": "^4.22.4",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.61.1"
+	}
+}

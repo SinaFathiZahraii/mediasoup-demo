@@ -1,0 +1,32 @@
+stages:
+  - build
+ # - test
+  - deploy
+
+variables:
+  IMAGE_NAME:
+    mediasoup-demo
+
+build:
+  stage: build
+  image:
+    name: docker:27
+  services:
+    - docker:27-dind
+  script:
+    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHA .
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:
+  stage: deploy
+  image:
+    name: bitnami/kubectl:latest
+  script:
+    - mkdir -p ~/.kube
+    - echo "$KUBE_CONFIG" > ~/.kube/config
+    - kubectl apply -f k8s/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+

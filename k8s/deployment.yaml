@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mediasoup-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mediasoup-demo
+  template:
+    metadata:
+      labels:
+        app: mediasoup-demo
+    spec:
+      containers:
+      - name: mediasoup-demo
+        image: your-dockerhub-username/mediasoup-demo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 4443
+          protocol: TCP
+        - name: webrtc-udp
+          containerPort: 44444
+          protocol: UDP
+        - name: webrtc-tcp
+          containerPort: 44444
+          protocol: TCP
+        env:
+        - name: HTTP_LISTEN_PORT
+          value: "4443"
+        - name: MEDIASOUP_LISTEN_IP
+          value: "0.0.0.0"
+        resources:
+          requests:
+            cpu: "2"
+            memory: "2Gi"
+          limits:
+            cpu: "4"
+            memory: "4Gi"
+
