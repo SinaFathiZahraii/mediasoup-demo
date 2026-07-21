@@ -72,20 +72,28 @@ Generate Self-Signed SSL Certificates
 Since WebRTC requires a secure context (HTTPS/WSS) to access user media (microphone and webcam), you must provide TLS certificates. 
 For local or LAN testing, you can generate self-signed certificates. Run the following commands from the root of the project (mediasoup-demo/):
 
+1.Create the certs directory if it doesn't exist
 ```
-# 1. Create the certs directory if it doesn't exist 
 mkdir -p app/certs
-# 2. Generate the self-signed certificate and private key 
-openssl req -x509 -newkey rsa:4096 -keyout app/certs/key.pem -out app/certs/cert.pem -days 365 -nodes -subj "/CN=localhost"
-# 3. Open the server/config.mjs file and change the tls section exactly like this (give the paths inside the docker):
-        tls: {
+```
+2.Generate the self-signed certificate and private key
+```
+openssl req -x509 -newkey rsa:4096 -keyout app/certs/key.pem -out app/certs/cert.pem -days 365 -nodes -subj "/CN=localhost" 
+```
+3.Open the server/config.mjs file and change the tls section exactly like this (give the paths inside the docker):
+```
+tls: {
             cert: '/app/certs/cert.pem',
             key: '/app/certs/key.pem',
         },
-# 4.Run container - adjust paths since certs are in app/certs/
+```
+4.Run container - adjust paths since certs are in app/certs/
+```
 docker run -d --name mediasoup-demo -p 4443:4443 -p 10000-59999:10000-59999/udp -v $(pwd)/app/certs:/app/certs:ro mediasoup-demo:v3
-# 5. in browser:
-https://IP_SERVER:4443 
+```
+5.in browser:
+```
+https://IP_SERVER:4443
 ```
 
 ## setup via Docker
