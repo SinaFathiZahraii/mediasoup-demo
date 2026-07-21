@@ -1,40 +1,65 @@
 stages:
-  - build
   - test
+  - build
   - deploy
 
 variables:
+  IMAGE_NAME: sinafathi/mediasoup
   IMAGE_TAG: $CI_COMMIT_SHA
 
 default:
   tags:
-    - runner-tag  
+    - runner-tag
+
+test:server:
+  stage: test
+  image: node:22-alpine
+  script:
+    - cd server
+    - npm ci --ignore-scripts
+    - npx tsc --noEmit
+    - npx eslint -c eslint.config.mjs --max-warnings 0
+        src npm-scripts.mjs eslint.config.mjs config.mjs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+test:app:
+  stage: test
+  image: node:22-alpine
+  script:
+    - cd app
+    - npm ci --legacy-peer-deps --ignore-scripts
+    - npm run lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 build:
   stage: build
   script:
-    - docker build -t sinafathi/mediasoup:$IMAGE_TAG .
-
-test:
-  stage: test
-  image: node:22
-  script:
-    - cd server
-    - npm ci --omit=dev
-    - cd ../app
-    - npm ci --legacy-peer-deps
-    - npm run lint || true 
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG -t $IMAGE_NAME:latest .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+    - docker push $IMAGE_NAME:latest
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
 
 deploy:
   stage: deploy
   image: bitnami/kubectl:latest
+  needs: [build]
+  environment:
+    name: production
+    url: https://YOUR_IP_SERVER:4443 
   script:
-    - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
-    - chmod 600 ~/.kube/config
-    - sed -i "s|sinafathi/mediasoup-demo:v1|$IMAGE_TAG|g" k8s/deployment.yaml
-    - kubectl apply -f k8s/
+     - mkdir -p ~/.kube
+     - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+     - chmod 600 ~/.kube/config
+
+     - kubectl create namespace mediasoup --dry-run=client -o yaml | kubectl apply -f -
+
+     - kubectl apply -f k8s/
+     - kubectl set image deployment/mediasoup-demo mediasoup-demo=$IMAGE_NAME:$IMAGE_TAG -n mediasoup
+     - kubectl rollout status deployment/mediasoup-demo -n mediasoup --timeout=120s
+
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
