@@ -17,27 +17,22 @@ COPY . .
 
 WORKDIR /build/app
 RUN npm ci --legacy-peer-deps
+RUN npm run build
 
 WORKDIR /build/server
 RUN npm ci
-
-WORKDIR /build/app
-RUN npm run build
-
+RUN npm run typescript:build
 
 # Runtime
 #==================
 FROM node:22-bookworm-slim
 
+
 WORKDIR /app
 
 COPY --from=builder /build/server .
-
 COPY --from=builder /build/app/dist ./public
 
 ENV NODE_ENV=production
 
-EXPOSE 4443
-
-CMD ["./bin/mediasoup-demo-server"]
-
+CMD ["npm","start"]
