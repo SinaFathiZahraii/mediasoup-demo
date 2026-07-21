@@ -1,5 +1,5 @@
 
-## Project Overview, Project Structure
+## Project Overview
 
 This project mediasoup-demo is a real-time audio/video/screen sharing application built on mediasoup, a Node.js SFU library. Unlike mesh (P2P) or full MCU architectures, an SFU relays media streams between participants without the need for code conversion, which keeps CPU overhead low and allows a single server to support many participants in each room.
 
