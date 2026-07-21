@@ -2,27 +2,54 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mediasoup-demo
+  namespace: mediasoup        
+  labels:
+    app: mediasoup-demo
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: mediasoup-demo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1               
+      maxUnavailable: 0   
   template:
     metadata:
       labels:
         app: mediasoup-demo
     spec:
       containers:
-      - name: mediasoup-demo
-        image: sinafathi/mediasoup-demo:v1
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 4443
-        resources:
-          requests:
-            cpu: "2"
-            memory: "2Gi"
-          limits:
-            cpu: "4"
-            memory: "4Gi"
+        - name: mediasoup-demo
+          image: sinafathi/mediasoup:v2
+          imagePullPolicy: Always             
 
+          ports:
+            - name: signaling
+              containerPort: 4443
+              protocol: TCP
+
+          resources:
+            requests:
+              cpu: "2"
+              memory: "2Gi"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4443
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4443
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 4
