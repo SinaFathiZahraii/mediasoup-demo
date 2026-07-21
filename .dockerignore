@@ -1,0 +1,22 @@
+# Dependencies – rebuilt inside Docker
+**/node_modules
+
+# Build outputs – rebuilt inside Docker
+app/dist
+server/lib
+
+# GitLab / Git
+.git
+.gitignore
+.gitlab-ci.yml
+
+# Docs & misc
+README.md
+CHANGELOG.md
+LICENSE
+deploy/
+tmp-scripts/
+broadcasters/
+broadcaster/
+aiortc/
+k8s/
