@@ -29,8 +29,9 @@ export const config = {
 		 * Optional. If tls is not set, server will use HTTP instead.
 		 */
 		tls: {
-			cert: 'ABSOLUTE_PATH_TO_YOUR_TLS_CERTIFICATE_FULLCHAIN',
-			key: 'ABSOLUTE_PATH_TO_YOUR_TLS_CERTIFICATE_PRIVATE_KEY',
+                     cert: '/app/certs/cert.pem',
+                     key: '/app/certs/key.pem',
+			
 		},
 	},
 	/**
