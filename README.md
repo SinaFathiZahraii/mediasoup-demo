@@ -96,7 +96,7 @@ docker run -d --name mediasoup-demo -p 4443:4443 -p 10000-59999:10000-59999/udp 
 https://IP_SERVER:4443
 ```
 
-## setup via Docker
+## setup without SSL via Docker
 
 ```
 docker build -t IMAGE_NAME:INAGE_TAG .
