@@ -25,10 +25,28 @@ spec:
           image: sinafathi/mediasoup:v2
           imagePullPolicy: IfNotPresent             
 
-          ports:
+					ports:
             - name: signaling
               containerPort: 4443
               protocol: TCP
+            - name: rtc-min
+              containerPort: 40000
+              protocol: UDP
+            - name: rtc-max
+              containerPort: 40999
+              protocol: UDP
+ 
+          env:
+            - name: MEDIASOUP_ANNOUNCED_ADDRESS
+              value: "YOUR_PUBLIC_IP"         
+							
+            - name: MEDIASOUP_MIN_PORT
+              value: "40000"
+            - name: MEDIASOUP_MAX_PORT
+              value: "40999"
+            - name: MEDIASOUP_NUM_WORKERS
+              value: "2"
+
 
           resources:
             requests:
