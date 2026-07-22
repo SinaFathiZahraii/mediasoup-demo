@@ -23,7 +23,7 @@ spec:
       containers:
         - name: mediasoup-demo
           image: sinafathi/mediasoup:v2
-          imagePullPolicy: Always             
+          imagePullPolicy: IfNotPresent             
 
           ports:
             - name: signaling
