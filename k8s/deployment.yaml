@@ -25,7 +25,7 @@ spec:
           image: sinafathi/mediasoup:v2
           imagePullPolicy: IfNotPresent             
 
-					ports:
+		  ports:
             - name: signaling
               containerPort: 4443
               protocol: TCP
